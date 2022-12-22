@@ -97,7 +97,7 @@ def newton(fx,x0,Max=256):
     n=0
     while abs(fx.caculate(x0))!=0:
         if abs(dervation(fx).caculate(x0))==0:
-            break
+            return x0,-1
         x1=x0-fx.caculate(x0)/dervation(fx).caculate(x0)
         if x1==x0:
             break
