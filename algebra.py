@@ -97,7 +97,7 @@ def newton(fx,x0,Max=256):
     n=0
     while abs(fx.caculate(x0))!=0:
         if abs(dervation(fx).caculate(x0))==0:
-            return x0,-1
+            return x0,-1,fx.caculate(x0)
         x1=x0-fx.caculate(x0)/dervation(fx).caculate(x0)
         if x1==x0:
             break
@@ -107,15 +107,15 @@ def newton(fx,x0,Max=256):
         if n==Max:
             break
     if x0==0:
-        return 0,0
+        return 0,0,fx.caculate(0)
     else:
         error=2**(math.floor(math.log2(abs(x0)))-52)/dervation(fx).caculate(x0)
         digits=-math.floor(math.log10(abs(error)))
         x0=round(x0.real,digits)+round(x0.imag,digits)*1j
         if x0.imag==0:
-            return x0.real,digits
+            return x0.real,digits,fx.caculate(x0.real)
         else:
-            return x0,digits
+            return x0,digits,fx.caculate(x0)
             
 def solve(fx):
     if len(fx.coefficients)==2:
