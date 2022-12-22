@@ -1,9 +1,9 @@
 import math
 
 class algebra_expression:
-    def __init__(self,coefficients):
+    def __init__(self,coefficients,delZeros=True):
         self.coefficients=coefficients
-        while len(self.coefficients)>0 and self.coefficients[0]==0:
+        while len(self.coefficients)>1 and self.coefficients[0]==0 and delZeros:
             del self.coefficients[0]
 
     def caculate(self,x):
@@ -44,7 +44,7 @@ class algebra_expression:
                     ans+='+'+str(coefficient)+'*x**'+str(n)
         return ans
 
-def add(a,b):
+def add(a,b,delZeros=True):
     ans=[]
     if len(a.coefficients)>=len(b.coefficients):
         n=len(a.coefficients)
@@ -54,9 +54,9 @@ def add(a,b):
             else:
                 ans.append(c+b.coefficients[-n])
             n-=1
-        return algebra_expression(ans)
+        return algebra_expression(ans,delZeros)
     else:
-        return add(b,a)
+        return add(b,a,delZeros)
 
 def multiply(a,b):
     ans=[]
@@ -80,7 +80,8 @@ def devide(a,b):
         subtrahend=[-ans[-1]]
         for m in range(len(dividend)-len(divisor)):
             subtrahend.append(0)
-        dividend=add(algebra_expression(dividend),multiply(algebra_expression(subtrahend),b)).coefficients
+        dividend=add(algebra_expression(dividend,False),multiply(algebra_expression(subtrahend),b),False).coefficients
+        del dividend[0]
     return algebra_expression(ans),algebra_expression(dividend)
 
 def dervation(fx):
