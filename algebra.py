@@ -106,11 +106,22 @@ def newton(fx,x0,Max=256):
             x0=x1
         n+=1
         if n==Max:
+            print('Newton time out!')
             break
     if x0==0:
         return 0,0,fx.caculate(0)
     else:
-        error=2**(math.floor(math.log2(abs(x0)))-52)/dervation(fx).caculate(x0)
+        error=abs(2**(math.floor(math.log2(abs(x0)))-52)/dervation(fx).caculate(x0))+abs(fx.caculate(x0)/dervation(fx).caculate(x0))
+        error2=0
+        n=len(fx.coefficients)
+        for c in fx.coefficients:
+            n-=1
+            error3=abs(c*x0**n)
+            if error2<error3:
+                error2=error3
+        error2=2**(math.floor(math.log2(error2))-52)
+        if error<error2:
+            error=error2
         digits=-math.floor(math.log10(abs(error)))
         x0=round(x0.real,digits)+round(x0.imag,digits)*1j
         if x0.imag==0:
