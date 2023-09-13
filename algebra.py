@@ -130,6 +130,17 @@ def newton(fx,x0,Max=256):
             return x0,digits,fx.caculate(x0)
             
 def solve(fx):
+    def curt(a):
+        if type(a)==complex:
+            if a.imag==0 and a.real<0:
+                return -(-a.real)**(1/3)
+            else:
+                return a**(1/3)
+        else:
+            if a<0:
+                return -(-a)**(1/3)
+            else:
+                return a**(1/3)
     if len(fx.coefficients)==2:
         return [-fx.coefficients[1]/fx.coefficients[0]]
 
@@ -154,17 +165,17 @@ def solve(fx):
         p=p/(3*a)**2
         q=q/(3*a)**3
         if delta>0:
-            ans=[(-b/3/a+(-q/2+delta**0.5)**(1/3)+(-q/2-delta**0.5)**(1/3)).real,
-            -b/3/a+(-q/2+delta**0.5)**(1/3)*(-1/2+3**0.5/2*1j)+(-q/2-delta**0.5)**(1/3)*(-1/2-3**0.5/2*1j),
-            -b/3/a+(-q/2+delta**0.5)**(1/3)*(-1/2-3**0.5/2*1j)+(-q/2-delta**0.5)**(1/3)*(-1/2+3**0.5/2*1j)]
+            ans=[(-b/3/a+curt(-q/2+delta**0.5)+curt(-q/2-delta**0.5)).real,
+            -b/3/a+curt(-q/2+delta**0.5)*(-1/2+3**0.5/2*1j)+curt(-q/2-delta**0.5)*(-1/2-3**0.5/2*1j),
+            -b/3/a+curt(-q/2+delta**0.5)*(-1/2-3**0.5/2*1j)+curt(-q/2-delta**0.5)*(-1/2+3**0.5/2*1j)]
         else:
-            ans=[(-b/3/a+(-q/2+(-delta)**0.5*1j)**(1/3)+(-q/2-(-delta)**0.5*1j)**(1/3)).real,
-            (-b/3/a+(-q/2+(-delta)**0.5*1j)**(1/3)*(-1/2+3**0.5/2*1j)+(-q/2-(-delta)**0.5*1j)**(1/3)*(-1/2-3**0.5/2*1j)).real,
-            (-b/3/a+(-q/2+(-delta)**0.5*1j)**(1/3)*(-1/2-3**0.5/2*1j)+(-q/2-(-delta)**0.5*1j)**(1/3)*(-1/2+3**0.5/2*1j)).real]
-        ans1=[]
+            ans=[(-b/3/a+curt(-q/2+(-delta)**0.5*1j)+curt(-q/2-(-delta)**0.5*1j)).real,
+            (-b/3/a+curt(-q/2+(-delta)**0.5*1j)*(-1/2+3**0.5/2*1j)+curt(-q/2-(-delta)**0.5*1j)*(-1/2-3**0.5/2*1j)).real,
+            (-b/3/a+curt(-q/2+(-delta)**0.5*1j)*(-1/2-3**0.5/2*1j)+curt(-q/2-(-delta)**0.5*1j)*(-1/2+3**0.5/2*1j)).real]
+        '''ans1=[]
         for a in ans:
-            ans1.append(newton(fx,a)[0])
-        return ans1
+            ans1.append(newton(fx,a)[0])'''
+        return ans
 
     elif len(fx.coefficients)==5:
         a=fx.coefficients[0]
@@ -182,9 +193,9 @@ def solve(fx):
         P=P/9
         Q=Q/54
         if abs(Q+D)>abs(Q-D):
-            u=(Q+D)**(1/3)
+            u=curt(Q+D)
         else:
-            u=(Q-D)**(1/3)
+            u=curt(Q-D)
         if u==0:
             v=0
         else:
@@ -216,16 +227,16 @@ def solve(fx):
             ans=ans[1]
         else:
             ans=ans[2]
-        ans1=[]
+        '''ans1=[]
         for a in ans:
-            ans1.append(newton(fx,a)[0])
-        return ans1
+            ans1.append(newton(fx,a)[0])'''
+        return ans
         
     else:
         return []
 
 if __name__=='__main__':
-    fx=algebra_expression([1,2,-3])
+    '''fx=algebra_expression([1,2,-3])
     gx=algebra_expression([-1,4,-5])
     hx=add(fx,gx)
     px=multiply(fx,gx)
@@ -242,3 +253,7 @@ if __name__=='__main__':
     print(solve(gx))
     print(solve(px))
     print(solve(sx))
+    '''
+    fx=algebra_expression([2,2,3,4,5])
+    print(fx.toString())
+    print(solve(fx))
